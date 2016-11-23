@@ -25,3 +25,12 @@ int exec() {
 
   return 0;
 }
+
+
+//Testing///
+/*
+int main(){
+  printf("type: ");
+  exec();
+}
+*/
