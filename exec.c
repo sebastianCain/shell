@@ -2,9 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 
-int main() {
-
-  printf("run a program here --> ");
+int exec() {
 
   char dest[20];
   //printf("before while");
