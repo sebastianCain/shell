@@ -6,11 +6,19 @@
 //#include "pipes.h"
 
 void showPrompt() {
-  char prompt[50];
-  gethostname(prompt, 50);
-  char *cwd;
-  getcwd(cwd, 50);
-  printf("%s\n");
+  char prompt[100];
+
+  char username[20];
+  getlogin_r(username, 20);
+  char hostname[20];
+  gethostname(hostname, 20);
+  char cwd[60];
+  getcwd(cwd, 60);
+
+  strcat(prompt, username);
+  strcat(prompt, "@");
+  strcat(prompt, hostname);
+  strcat(prompt, ":");
   strcat(prompt, cwd);
   strcat(prompt, "$ ");
   printf("%s", prompt);
@@ -18,4 +26,5 @@ void showPrompt() {
 
 int main() {
   showPrompt();
+  return 0;
 }
