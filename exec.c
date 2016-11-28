@@ -10,7 +10,7 @@ int exec() {
   while (1) {
     
     printf("type: ");
-    fgets(dest, 20, stdin);
+    fgets(dest, 100, stdin);
 
     if(strstr(dest, " ")){
       printf(" heyo\n");
