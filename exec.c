@@ -6,48 +6,73 @@
 
 int exec() {
 
-  char dest[20];
+  char dest[100];
   while (1) {
-  printf("type: ");
-  fgets(dest, 20, stdin);
-  
-  //printf("%s", dest);
-  char *newline = strstr(dest, "\n");
-  *newline = 0;
-  char *s = dest;
-  char *command[20];
-  int i = 0;
-  
-  while (s) {
-    command[i] = strsep(&s, " ");
-    i++;
-  }
-  command[i] = 0;
-  
-  //command has all its info
-  
-  int f;
-  f = fork();
-  
-  //the child--here the program is run
-  if (f==0){
-    if(strcmp(command[0],"exit") == 0){
-      //return 0;
-      //need to kill parent too
-      //break;
-      int ppid=getppid();
-      //printf("%d\n", ppid);
-      kill(ppid, 9);
+
+    int a=0;
+    while(dest[a]){
+      dest[a]=0;
+      a++;
     }
-    execvp(command[0], command);
-    return 0;
-  }
-  
-  //the parent 
-  else{
-    sleep(1);
-    printf("debug\n");
-  }
+    
+    printf("type: ");
+    fgets(dest, 20, stdin);
+
+    if(strstr(dest, " ")){
+      printf(" heyo\n");
+    }
+    
+    //printf("%s", dest);
+    char *newline = strstr(dest, "\n");
+    *newline = 0;
+    char *s = dest;
+    char *command[100];
+    int i = 0;
+
+    int b=0;
+    while(command[b]){
+      command[b]=0;
+      b++;
+    }
+    
+    while (s) {
+      command[i] = strsep(&s, " ");
+      i++;
+    }
+    command[i] = 0;
+    
+    //command has all its info
+    
+    int f;
+    f = fork();
+    
+    //the child--here the program is run
+    if (f==0){
+      if(strcmp(command[0],"exit") == 0){
+	//return 0;
+	//need to kill parent too
+	//break;
+	int ppid=getppid();
+	//printf("%d\n", ppid);
+	kill(ppid, 9);
+      }
+
+      if(strcmp(command[0],"cd")==0){//cd cause
+	return 0;//handeled in the main
+      }
+      
+      execvp(command[0], command);
+      return 0;
+    }
+    
+    //the parent 
+    else{
+      if(strcmp(command[0],"cd")==0){//cd cause
+        execvp(command[0], command);
+      }
+      sleep(1);
+      printf("debug\n");
+    }
   }
   return 0;
 }
