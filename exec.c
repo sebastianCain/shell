@@ -8,12 +8,6 @@ int exec() {
 
   char dest[100];
   while (1) {
-
-    int a=0;
-    while(dest[a]){
-      dest[a]=0;
-      a++;
-    }
     
     printf("type: ");
     fgets(dest, 20, stdin);
@@ -22,18 +16,11 @@ int exec() {
       printf(" heyo\n");
     }
     
-    //printf("%s", dest);
     char *newline = strstr(dest, "\n");
     *newline = 0;
     char *s = dest;
     char *command[100];
     int i = 0;
-
-    int b=0;
-    while(command[b]){
-      command[b]=0;
-      b++;
-    }
     
     while (s) {
       command[i] = strsep(&s, " ");
