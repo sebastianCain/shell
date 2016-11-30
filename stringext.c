@@ -1,3 +1,4 @@
+
 char * promptString() {
   char prompt[100];
 
@@ -17,40 +18,55 @@ char * promptString() {
   return prompt;
 }
 
-//to split funcs w semicolons
-char*[] splitCommands(char *p) {
-  char commands*[20] = malloc(1000);
-  int i = 0;
-  while(p) {
-    commands[i] = strsep(&p, ";");
+int split_semis(char dest[], char * command[]) {
+  char *p = dest;
+    
+  int i=0;
+  while(p){
+    command[i]=strsep(&p, ";");
     i++;
   }
-  commands[i] = 0;
-  return commands;
+  command[i]=0;
+
+  return i;
 }
 
-char*[] commandArrayFromString(char *p) {
-  char commands*[20] = malloc(1000);
-  int i = 0;
-  while(p) {
-    commands[i] = strsep(&p, " ");
-    i++;
+void split_spaces(char dest[], char * local_command[]){
+  char *s=dest;
+  int k = 0;
+  while (s) {
+    local_command[k] = strsep(&s, " ");
+    //if there are extra spaces, we set the memory there to 0
+    //then we ove back one step, there by allowing us to write over the slot
+    if(*(local_command[k]) == 0){
+      //local_command[k]=0;
+      k--;
+    }
+    k++;
   }
-  commands[i] = 0;
-  return commands;
+  local_command[k] = 0;
+  
+  printf("--------\n");
 }
 
-char *strip(char[] p) {
-  char final[20];
-  int i = 0;
-  while(p[i] == " ") {
-    p = p[i+1];
-    i++;
+//returns the loacation of a ceratin charechter,
+int find(char * haystack[], char * needle){
+  int ans=0;
+  while(haystack[ans]){
+    if(strcmp(haystack[ans], needle) == 0){
+	return ans;
+    }
+    ans++;
   }
-  int j = 20;
-  while(p[j] == 0 || p[j] == " ") {
-    p[j] = 0;
-    j--;
+  return -1;//was not found;
+}
+
+//puts vals from s into d , ending before position n,
+int repackage(char * dest[], char * src[], int n){
+  int x=0;
+  while(src[x] && x<n){
+    dest[x]=src[x];
+    x++;
   }
-  return final;
+  return 0;
 }
