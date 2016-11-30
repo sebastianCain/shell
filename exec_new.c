@@ -113,13 +113,24 @@ int exec(){
 	if(strcmp(local_command[0], "cd") == 0){//this is dealt in parent
 	  return 0;
 	}
-	
+
+	//the stdout case
 	int pos;
 	pos=find(local_command, ">");
 	if(pos != -1){// if ">" is in loc_comm
 	  std_out(local_command, pos);
 	  return 0;
 	}
+
+	//the stdin case
+	pos=find(local_command, "<");
+	if(pos != -1){// if ">" is in loc_comm
+	  
+	  //THIS WILL USE THE SAME METHOS AS STD_OUT (SEE ABOVE)
+
+	  return 0;
+	}
+	
 	//all other cases
 	execvp(local_command[0], local_command);
       }
