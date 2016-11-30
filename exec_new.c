@@ -32,12 +32,6 @@ void split_spaces(char dest[], char * local_command[]){
   }
   local_command[k] = 0;
   
-  printf("%d-size\n", k);
-  int c=0;
-  while(local_command[c]){
-    printf("[%s]\n", local_command[c]);
-    c++;
-  }
   printf("--------\n");
 }
 
