@@ -72,12 +72,34 @@ int std_out(char * command[], int pos){
   int nother_fork;//needed to return the process table back to normal
   nother_fork = fork();
 
-  if(nother_fork == 0){
+  if (nother_fork == 0){
     execvp(command[0], command);
-  }
-  else{
+  } else {
     wait(&status);
     int b = dup2(new_home, 1); 
+    close(fd);
+  }
+  return 0;
+}
+
+int std_in(char * command[], int pos){
+  int status;
+  int fd = open(command[pos+1], O_RDONLY, 0644);
+  
+  //the shuffle//	  
+  int new_home = dup(0);
+  dup2(fd, 0);
+  
+  command[pos]=0;
+
+  int nother_fork;//needed to return the process table back to normal
+  nother_fork = fork();
+
+  if(nother_fork == 0){
+    execvp(command[0], command);
+  } else {
+    wait(&status);
+    int b = dup2(new_home, 0); 
     close(fd);
   }
   return 0;
@@ -125,7 +147,7 @@ int exec(){
 	//the stdin case
 	pos=find(local_command, "<");
 	if(pos != -1){// if ">" is in loc_comm
-	  
+	  std_in(local_command, pos);
 	  //THIS WILL USE THE SAME METHOS AS STD_OUT (SEE ABOVE)
 
 	  return 0;
