@@ -2,8 +2,13 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <signal.h>
-#include "stringext.h"
 #include <fcntl.h>
+#include <string.h>
+
+#include "stringext.h"
+
+//To comile use the gcc -c <filenm> comamnd to get .o files then combine those
+
 
 int std_out(char * command[], int pos){
   int status;
@@ -97,6 +102,75 @@ int exec(){
 	  //THIS WILL USE THE SAME METHOS AS STD_OUT (SEE ABOVE)
 
 	  return 0;
+	}
+
+	pos = find(local_command, "|");
+	if(pos != -1){
+
+	  int status;
+	  int fd = open("no_touch", O_WRONLY | O_CREAT | O_RDONLY, 0644);
+	  
+	  //the shuffle//	  
+	  int new_home = dup(1);
+	  dup2(fd, 1);
+	  
+	  //local_command[pos]=0;
+
+	  char * hold [20];
+
+	  int r=0;
+	  while(r<pos && local_command[r]){
+	    hold[r]=local_command[r];
+	    r++;
+	  }
+	  hold[r]=0;
+	  
+	  int a_fork;//needed to return the process table back to normal
+	  a_fork = fork();
+	  
+	  if(a_fork == 0){
+	    execvp(hold[0], hold);
+	  } else {
+	    wait(&status);
+	    close(fd);
+	    int b = dup2(new_home, 1);
+	  }
+
+	  //part 2
+	  
+	  fd = open("no_touch", O_RDONLY, 0644);
+
+	  
+	  int a=0;
+	  while(local_command[pos+a+1]){
+	    hold[a]=local_command[pos+a+1];
+	    a++;
+	  }
+	  hold[a]=0;
+	  
+	  //Now hold only holds the stuff after the |, 
+	  //close(fd);
+	  
+	  int new_home_again = dup(0);
+	  dup2(fd, 0);
+	  
+	  int b_fork;
+	  b_fork=fork();
+	  
+	  if(b_fork == 0){
+	    
+	    execvp(hold[0], hold);
+	  }
+	  else{
+	    wait(&status);
+	    
+	    dup2(new_home_again, 0);
+	    close(fd);
+
+	  }
+	  
+	  return 0;
+	    
 	}
 	
 	//all other cases

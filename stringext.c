@@ -1,4 +1,12 @@
+#include <unistd.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <signal.h>
+#include <fcntl.h>
 
+#include <string.h>
+
+/*
 char * promptString() {
   char prompt[100];
 
@@ -17,6 +25,7 @@ char * promptString() {
   strcat(prompt, "$ ");
   return prompt;
 }
+*/
 
 int split_semis(char dest[], char * command[]) {
   char *p = dest;

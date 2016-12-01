@@ -1,4 +1,4 @@
-#include <string.h>
+//#include <string.h>
 
 char * promptString();
 int split_semis(char dest[], char * command[]);
