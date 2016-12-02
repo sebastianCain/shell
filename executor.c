@@ -68,6 +68,7 @@ void mykill() {
 
 int mypipe(char *command[], int pos) {
   //hold is where we store the part of local_command after the |
+
   char * hold[20];
   int e = 0;
   while(command[e+pos+1]){
@@ -99,9 +100,50 @@ int mypipe(char *command[], int pos) {
     return 0;
   } else {
     wait(&f);
+
+    /*
+    while(find(hold, "|") != -1){
+      
+      //close(fdx[1]);//close the write side
+      close(0);//close STD_IN
+      dup2(fdx[0], 0);//switch em
+
+      char * holder[20];
+      int d = 0;
+      while(hold[d+pos+1]){
+	holder[d] = hold[pos+1];
+	d++;
+      }
+      holder[d]=0;
+      
+      int new_f;
+      new_f=fork();
+
+      if(new_f == 0){
+	int pos_2;
+	pos_2=find(hold, "|");
+	hold[pos_2]=0;
+	dup2(fdx[1], 1);
+	execvp(hold[0], hold);
+	return 0;
+      }
+      else{
+	wait(&new_f);
+
+	int h=0;
+	while(holder[h]){
+	  hold[h]=holder[h];
+	  h++;
+	}
+	hold[h]=0;;
+      }
+    }
+    */
+    
     close(fdx[1]);//close the write side
     close(0);//close STD_IN
     dup2(fdx[0], 0);//switch em
+    
     execvp(hold[0], hold);
   }
   
@@ -194,6 +236,7 @@ int exec() {
 	}
       }
       j++;
+      printf("----------------------\n");
     }
   }
   return 0;
