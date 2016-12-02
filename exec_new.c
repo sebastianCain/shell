@@ -107,8 +107,8 @@ int exec(){
 
 	pos = find(local_command, "|");
 	if(pos != -1){
-	  //int status;
 
+	  //hold is where we store the part of local_command after the |
 	  char * hold[20];
 	  int e=0;
 	  while(local_command[e+pos+1]){
@@ -116,12 +116,13 @@ int exec(){
 	    e++;
 	  }
 	  hold[e]=0;
-	  
-	  int fdx[2];
-	  pipe(fdx);
 
-	  int hold_in = dup(0);
-	  int hold_out = dup(1);	  
+	  
+	  int fdx[2];//making the array
+	  pipe(fdx);//the pipe
+
+	  int hold_in = dup(0);//back ups
+	  int hold_out = dup(1);//back ups	  
 
 	  dup2(1,hold_in);//redirect out to in
 	  
@@ -130,26 +131,25 @@ int exec(){
 
 	  if(f == 0){
 	    local_command[pos]=0;//cleave it off before the |
-	    printf("one\n");
-
+	    
 	    close(fdx[0]);//closes the read side
-	    close(1);
-	    printf("bump\n");
+	    close(1);//close the output so it doenst leave
+	    
 	    dup2(fdx[1], 1);//puting fd[1] in place of 1
 
-	    execvp(local_command[0], local_command);
+	    execvp(local_command[0], local_command);//the exec
 	    return 0;
 	  }
 	  else{
 	    wait(&f);
-	    printf("heyo\n");
-	    close(fdx[1]);
-	    close(0);
-	    dup2(fdx[0], 0);
+	    close(fdx[1]);//close the write side
+	    close(0);//close STD_IN
+	    dup2(fdx[0], 0);//switch em
 	    execvp(hold[0], hold);
 	  }
 
-	  
+	  dup2(hold_in, 0);
+	  dup2(hold_out, 1);
 	  
 	  return 0;
 	}
@@ -159,7 +159,6 @@ int exec(){
       }
       else{
 	wait(&status);
-	//wait(NULL);
 	if((strcmp(local_command[0], "cd") == 0) && (local_command[1] != 0)){
 	  chdir(local_command[1]);
 	}
