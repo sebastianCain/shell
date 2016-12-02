@@ -1,0 +1,13 @@
+a.out
+#exec.c#
+exec.c
+exec_new.c
+exec_new.o
+lmao.txt
+main.c
+makefile
+no_touch
+stringext.c
+stringext.h
+stringext.h~
+stringext.o

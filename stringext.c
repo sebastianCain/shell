@@ -26,8 +26,6 @@ char * promptString() {
   strcat(prompt, cwd);
   strcat(prompt, "$ ");
 
-  //char *globalprompt = malloc(400);
-  //*globalprompt = prompt;
   return prompt;
 }
 

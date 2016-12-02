@@ -61,6 +61,56 @@ int std_in(char * command[], int pos){
   return 0;
 }
 
+void mykill() {
+  int ppid = getppid();
+  kill(ppid, 9); // kill the parent
+}
+
+int mypipe(char *command[], int pos) {
+  //hold is where we store the part of local_command after the |
+  char * hold[20];
+  int e = 0;
+  while(command[e+pos+1]){
+    hold[e] = command[pos+1];
+    e++;
+  }
+  hold[e]=0;
+  
+  int fdx[2];//making the array
+  pipe(fdx);//the pipe
+  
+  int hold_in = dup(0);//back ups
+  int hold_out = dup(1);//back ups	  
+  
+  dup2(1, hold_in);//redirect out to in
+  
+  int f;
+  f = fork();
+  
+  if(f == 0){
+    command[pos] = 0;//cleave it off before the |
+    
+    close(fdx[0]);//closes the read side
+    close(1);//close the output so it doenst leave
+    
+    dup2(fdx[1], 1);//puting fd[1] in place of 1
+    
+    execvp(command[0], command);//the exec
+    return 0;
+  } else {
+    wait(&f);
+    close(fdx[1]);//close the write side
+    close(0);//close STD_IN
+    dup2(fdx[0], 0);//switch em
+    execvp(hold[0], hold);
+  }
+  
+  dup2(hold_in, 0);
+  dup2(hold_out, 1);
+  
+  return 0;
+}
+
 int exec() {
   while(1) {
     char *prompt = promptString();
@@ -82,93 +132,59 @@ int exec() {
       char * local_command[20];
       split_spaces(command[j], local_command);
       
+      printf("about to check for nothingness\n");
+      printf("loc_com[0]: %s\n", local_command[0]);
+      printf("about to check for nothingness pt 2\n");
+
+      
+      
       int f;
-      f=fork();
-      if(f==0){//child
-	if(strcmp(local_command[0],"exit") == 0){
-	  int ppid = getppid();
-	  kill(ppid, 9);// kill the parent
-	  return 0;//kill itself
-	}
-	if(strcmp(local_command[0], "cd") == 0){//this is dealt in parent
-	  return 0;
-	}
+      f = fork();
+      if (f == 0) {//child
+
+        if (local_command[0] == NULL) {
+          //either spaces or nothing
+          return 0;
+        }
+        
+        if (strcmp(local_command[0],"exit") == 0){
+          mykill();
+          return 0; //kill child
+        }
+
+        if (strcmp(local_command[0], "cd") == 0){//this is dealt in parent
+          return 0;
+        }
 	
-	//the stdout case
-	int pos;
-	pos=find(local_command, ">");
-	if(pos != -1){// if ">" is in loc_comm
-	  std_out(local_command, pos);
-	  return 0;
-	}
-
-	//the stdin case
-	pos=find(local_command, "<");
-	if(pos != -1){// if ">" is in loc_comm
-	  std_in(local_command, pos);
-	  //THIS WILL USE THE SAME METHOS AS STD_OUT (SEE ABOVE)
-
-	  return 0;
-	}
-
-	pos = find(local_command, "|");
-	if(pos != -1){
-
-	  //hold is where we store the part of local_command after the |
-	  char * hold[20];
-	  int e=0;
-	  while(local_command[e+pos+1]){
-	    hold[e]=local_command[pos+1];
-	    e++;
-	  }
-	  hold[e]=0;
-
-	  
-	  int fdx[2];//making the array
-	  pipe(fdx);//the pipe
-
-	  int hold_in = dup(0);//back ups
-	  int hold_out = dup(1);//back ups	  
-
-	  dup2(1,hold_in);//redirect out to in
-	  
-	  int f;
-	  f=fork();
-
-	  if(f == 0){
-	    local_command[pos]=0;//cleave it off before the |
-	    
-	    close(fdx[0]);//closes the read side
-	    close(1);//close the output so it doenst leave
-	    
-	    dup2(fdx[1], 1);//puting fd[1] in place of 1
-
-	    execvp(local_command[0], local_command);//the exec
-	    return 0;
-	  }
-	  else{
-	    wait(&f);
-	    close(fdx[1]);//close the write side
-	    close(0);//close STD_IN
-	    dup2(fdx[0], 0);//switch em
-	    execvp(hold[0], hold);
-	  }
-
-	  dup2(hold_in, 0);
-	  dup2(hold_out, 1);
-	  
-	  return 0;
-	}
-	
-	//all other cases
-	execvp(local_command[0], local_command);
+        //the stdout case
+        int pos;
+        pos = find(local_command, ">");
+        if(pos != -1){// if ">" is in local_command
+          std_out(local_command, pos);
+          return 0;
+        }
+        
+        //the stdin case
+        pos = find(local_command, "<");
+        if(pos != -1){// if ">" is in local_command
+          std_in(local_command, pos);
+          return 0;
+        }
+        
+        pos = find(local_command, "|");
+        if(pos != -1){
+          return mypipe(local_command, pos);
+        }
+        
+        //all other cases
+        execvp(local_command[0], local_command);
       }
       else{
-	//wait(&status);
-	wait(&f);
-	if((strcmp(local_command[0], "cd") == 0) && (local_command[1] != 0)){
-	  chdir(local_command[1]);
-	}
+        //wait(&status);
+        wait(&f);
+        if((strcmp(local_command[0], "cd") == 0) && (local_command[1] != 0)){
+          chdir(local_command[1]);
+        }
       }
       j++;
     }
