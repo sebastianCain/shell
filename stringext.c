@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include <unistd.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -6,16 +7,17 @@
 
 #include <string.h>
 
-/*
-char * promptString() {
-  char prompt[100];
 
-  char username[20];
-  getlogin_r(username, 20);
-  char hostname[20];
-  gethostname(hostname, 20);
-  char cwd[60];
-  getcwd(cwd, 60);
+char * promptString() {
+  char *prompt = malloc(400);
+  strcat(prompt, "(in_project)");
+  
+  char username[100];
+  getlogin_r(username, 100);
+  char hostname[100];
+  gethostname(hostname, 100);
+  char cwd[100];
+  getcwd(cwd, 100);
 
   strcat(prompt, username);
   strcat(prompt, "@");
@@ -23,9 +25,12 @@ char * promptString() {
   strcat(prompt, ":");
   strcat(prompt, cwd);
   strcat(prompt, "$ ");
+
+  //char *globalprompt = malloc(400);
+  //*globalprompt = prompt;
   return prompt;
 }
-*/
+
 
 int split_semis(char dest[], char * command[]) {
   char *p = dest;
@@ -54,8 +59,6 @@ void split_spaces(char dest[], char * local_command[]){
     k++;
   }
   local_command[k] = 0;
-  
-  printf("--------\n");
 }
 
 //returns the loacation of a ceratin charechter,

@@ -8,7 +8,7 @@
 
 #include "stringext.h"
 
-//To comile use the gcc -c <filenm> comamnd to get .o files then combine those
+//To compile without make use the gcc -c <filenm> comamnd to get .o files then combine those
 
 
 int std_out(char * command[], int pos){
@@ -61,9 +61,11 @@ int std_in(char * command[], int pos){
   return 0;
 }
 
-int exec(){
-  while(1){
-    printf("write here:");
+int exec() {
+  while(1) {
+    char *prompt = promptString();
+    printf("%s", prompt);
+    free(prompt);
     
     char dest[100];
     fgets(dest, 100, stdin);
@@ -173,10 +175,3 @@ int exec(){
   }
   return 0;
 }
-
-
-/*
-int main(){
-  exec();
-}
-*/

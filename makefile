@@ -1,4 +1,4 @@
-all: main.o executor.o stringext.o
+shell: main.o executor.o stringext.o
 	gcc main.o executor.o stringext.o -o shell
 
 main: main.c
