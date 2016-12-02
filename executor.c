@@ -132,19 +132,13 @@ int exec() {
       char * local_command[20];
       split_spaces(command[j], local_command);
       
-      printf("about to check for nothingness\n");
-      printf("loc_com[0]: %s\n", local_command[0]);
-      printf("about to check for nothingness pt 2\n");
-
-      
-      
       int f;
       f = fork();
       if (f == 0) {//child
 
-        if (local_command[0] == NULL) {
+        if (local_command[0] == 0) {
           //either spaces or nothing
-          return 0;
+	  return 0;
         }
         
         if (strcmp(local_command[0],"exit") == 0){
@@ -182,9 +176,22 @@ int exec() {
       else{
         //wait(&status);
         wait(&f);
-        if((strcmp(local_command[0], "cd") == 0) && (local_command[1] != 0)){
-          chdir(local_command[1]);
-        }
+
+	/*
+	if(local_command[0] != 0){
+	  if(strcmp(local_command[0], "cd") == 0){
+	    if (local_command[1] != 0){
+	      chdir(local_command[1]);
+	    }
+	  }
+	}
+	 */  
+	
+	if(local_command[0] != 0){
+	  if((strcmp(local_command[0], "cd") == 0) && (local_command[1] != 0)){
+	    chdir(local_command[1]);
+	  }
+	}
       }
       j++;
     }
