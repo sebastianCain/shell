@@ -1,11 +1,12 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <string.h>
-//#include "exec.h"
-//#include "redir.h"
-//#include "pipes.h"
+
+#include "executor.h"
+#include "stringext.h"
+
 
 int main() {
-  prompt();
+  exec();
   return 0;
 }
