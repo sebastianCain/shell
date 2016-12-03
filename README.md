@@ -2,7 +2,7 @@ FRB-SC SHELL
 by Felix Rieg-Baumhauer and Sebastian Cain
 
 Features:
-	Executes simple commands, ie (ls or ls -l), done by forking, 
+	Executes simple commands, ie (ls or ls -l), done by forking,
 	Executes commands even if there is unforseen whitespace, ie (ls    -l)
 	Executes cd and exit, done without forking
 	Execues multiple commands on one line, separted by ";",  ie (ls ; ls -l)
@@ -25,6 +25,10 @@ Bugs:
 
 Files & Function Headers:
 
+------------------------------------------------------------
+
+main.c
+	-only runs executor.c
 
 ------------------------------------------------------------
 
