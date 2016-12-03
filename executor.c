@@ -1,6 +1,5 @@
 //FELIX RIEG-BAUMHAUER AND SEBASTAIN CAIN
 
-
 #include <unistd.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -8,6 +7,8 @@
 #include <fcntl.h>
 #include <string.h>
 #include <stdlib.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 #include "stringext.h"
 
