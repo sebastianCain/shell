@@ -25,6 +25,38 @@ Bugs:
 
 Files & Function Headers:
 
+
+------------------------------------------------------------
+
+stringext.h:
+
+	char * promptString();
+	     
+	     -creates the prompt
+	     -returns a malloced piece of memory
+
+	int split_semis(char dest[], char * command[]);
+
+	    -splits command along the semicolons
+	    
+	void split_spaces(char dest[], char * local_command[]);
+
+	     -splits local_command along spaces
+	     -the recursib=velly goes through local_command, if any pointer poits to an empty string "", which can occur if two spces next to each other are parsed, the "" is overwritten by the next element
+	     
+	int find(char * haystack[], char * needle);
+
+	    -finds needl in haystack,
+	    -return the positon if sucesful,
+	    -returns -1 if not found
+
+	int repackage(char * dest[], char * src[], int n);
+
+	    -repackages n contents from src to dest,
+	    -dest is usually an empty array
+
+---------------------------------------------------------------------
+
 executor.h:
 
 	int std_out(char * command[], int pos);
