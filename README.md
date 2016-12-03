@@ -1,5 +1,6 @@
 FRB-SC SHELL
 by Felix Rieg-Baumhauer and Sebastian Cain
+12/2/16
 
 Features:
 	Executes simple commands, ie (ls or ls -l), done by forking,
@@ -22,7 +23,20 @@ Attempted:
 	
 Bugs:
 
+	-When trying to use multiple pipes:
+	I.E.
+	$ ls | wc | wc
+	output from the shell is:
 
+	wc: wc: No such file or directory
+	wc: wc: No such file or directory
+	0 0 0 total
+
+	THIS IS BEACUSE COMPLICATED (more than 1 pipe) PIPES DO NOT WORK
+
+
+	-Complicated multi rediriction systems also do not work
+	
 Files & Function Headers:
 
 ------------------------------------------------------------
