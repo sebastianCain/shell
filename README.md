@@ -72,6 +72,27 @@ executor.h:
 	    -revert file table to nomral
 	    
 	int exec();
+	    -the file that runs everything
+	    -starts by entering a forever while loop, while(1)
+	    -prints the prompt
+	    -takes in inout with fgets
+	    -splits the resulting array along semicolons
+	    -uses a while loop to "run" each command that is seperated by a semicolon. ie if ls ; ls -l is inputed, ls is first run through the while loop, then ls -l is.
+	    -IN THE WHILE LOOP
+	    -the string is split along spaces
+	    -fork of a child
+
+	    -CHILD
+	    -test for empty command, ie only spaces or only retun was entered
+	    -test for exit, call mykil()
+	    -test for cd, exit loop, this is dealt with in the parent, not child
+	    -test >, <, >>, call appropriate functions
+	    -test | call mypipe,
+	    -END OF CHILD
+
+	    -PARENT
+	    -test for cd, use chdir to change directory
+	    -END OF PARENT
 	
 	
 	
