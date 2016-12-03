@@ -90,7 +90,6 @@ int std_in(char * command[], int pos){
 
 void mykill() {
   int ppid = getppid();
-  printf("\nEXITING SHELL\n\n");
   kill(ppid, 9); // kill the parent
 }
 
@@ -204,6 +203,13 @@ int exec() {
     while(command[j]){//To go through the array
       char * local_command[20];
       split_spaces(command[j], local_command);
+
+      if (local_command[0] != NULL) {
+	if (strcmp(local_command[0],"exit") == 0){
+	  mykill();
+	  return 0; //kill child
+	}
+      }
       
       int f;
       f = fork();
@@ -213,15 +219,11 @@ int exec() {
           //either spaces or nothing
 	  return 0;
         }
-        
-        if (strcmp(local_command[0],"exit") == 0){
-          mykill();
-          return 0; //kill child
-        }
-
-        if (strcmp(local_command[0], "cd") == 0){//this is dealt in parent
-          return 0;
-        }
+         
+      
+	if (strcmp(local_command[0], "cd") == 0){//this is dealt in parent
+	  return 0;
+	}
 	
         //the stdout case
         int pos;
@@ -276,7 +278,7 @@ int exec() {
 	}
       }
       j++;
-      printf("\n----------------------\n");//For fomating reasons
+      //printf("\n----------------------\n");//For fomating reasons
     }
   }
   return 0;
