@@ -11,15 +11,21 @@
 char * promptString() {
   char *prompt = malloc(400);
   strcat(prompt, "(in_project)");
+
+  //DOSENT WORK
+  //char username[100];
+  //getlogin_r(username, 100);
+
+  //char * user;
+  //user=getlogin();
+
   
-  char username[100];
-  getlogin_r(username, 100);
   char hostname[100];
   gethostname(hostname, 100);
   char cwd[100];
   getcwd(cwd, 100);
 
-  strcat(prompt, username);
+  //strcat(prompt, username);
   strcat(prompt, "@");
   strcat(prompt, hostname);
   strcat(prompt, ":");

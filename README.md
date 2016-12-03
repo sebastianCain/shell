@@ -17,6 +17,7 @@ Features:
 Attempted:
 	Complex redirection
 	Compex pipes-the surrent pipe structure that we use is not well suited to being used recursivelly
+	Attempted to show the username of the user in the prompt, before hostname, this did not work. 
 	
 	
 Bugs:

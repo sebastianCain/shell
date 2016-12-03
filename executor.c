@@ -8,9 +8,6 @@
 
 #include "stringext.h"
 
-//To compile without make use the gcc -c <filenm> comamnd to get .o files then combine those
-
-
 int std_out(char * command[], int pos){//overwrites
   remove(command[pos+1]);
   
@@ -89,6 +86,7 @@ int std_in(char * command[], int pos){
 
 void mykill() {
   int ppid = getppid();
+  printf("\nEXITING SHELL\n\n");
   kill(ppid, 9); // kill the parent
 }
 
@@ -127,6 +125,8 @@ int mypipe(char *command[], int pos) {
   } else {
     wait(&f);
 
+
+    //ATTEMPT TO GET COMLEX PIPES TO WORK
     /*
     while(find(hold, "|") != -1){
       
@@ -183,6 +183,7 @@ int exec() {
   while(1) {
     char *prompt = promptString();
     printf("%s", prompt);
+    prompt=0;
     free(prompt);
     
     char dest[100];
@@ -196,7 +197,7 @@ int exec() {
     int j=0;
     int status;
     
-    while(command[j]){
+    while(command[j]){//To go through the array
       char * local_command[20];
       split_spaces(command[j], local_command);
       
@@ -226,6 +227,7 @@ int exec() {
           return 0;
         }
 
+	//redirect case
 	pos = find(local_command, ">>");
         if(pos != -1){// if ">>" is in local_command
           std_out_append(local_command, pos);
@@ -238,7 +240,8 @@ int exec() {
           std_in(local_command, pos);
           return 0;
         }
-        
+
+	//pipe case
         pos = find(local_command, "|");
         if(pos != -1){
           return mypipe(local_command, pos);
@@ -251,6 +254,7 @@ int exec() {
         //wait(&status);
         wait(&f);
 
+	//AN ATTEMPT TO WRITE THINGS MORE CONSICELLY
 	/*
 	if(local_command[0] != 0){
 	  if(strcmp(local_command[0], "cd") == 0){
@@ -268,7 +272,7 @@ int exec() {
 	}
       }
       j++;
-      printf("\n----------------------\n");
+      printf("\n----------------------\n");//For fomating reasons
     }
   }
   return 0;
