@@ -1,3 +1,5 @@
+//FELIX RIEG-BAUMHAUER AND SEBASTAIN CAIN
+
 //#include <string.h>
 
 char * promptString();
