@@ -11,9 +11,35 @@
 //To compile without make use the gcc -c <filenm> comamnd to get .o files then combine those
 
 
-int std_out(char * command[], int pos){
-  int status;
+int std_out(char * command[], int pos){//overwrites
+  remove(command[pos+1]);
+  
   int fd = open(command[pos+1], O_CREAT | O_WRONLY, 0644);
+  
+  //the shuffle//	  
+  int new_home = dup(1);
+  dup2(fd, 1);
+  
+  command[pos]=0;
+
+  int nother_fork;//needed to return the process table back to normal
+  nother_fork = fork();
+
+  if (nother_fork == 0){
+    execvp(command[0], command);
+  }
+  else {
+    //wait(&status);
+    wait(&nother_fork);
+    int b = dup2(new_home, 1); 
+    close(fd);
+  }
+  return 0;
+}
+
+int std_out_append(char * command[], int pos){
+  int status;
+  int fd = open(command[pos+1], O_CREAT | O_WRONLY | O_APPEND, 0644);
   
   //the shuffle//	  
   int new_home = dup(1);
@@ -199,10 +225,16 @@ int exec() {
           std_out(local_command, pos);
           return 0;
         }
+
+	pos = find(local_command, ">>");
+        if(pos != -1){// if ">>" is in local_command
+          std_out_append(local_command, pos);
+          return 0;
+        }
         
         //the stdin case
         pos = find(local_command, "<");
-        if(pos != -1){// if ">" is in local_command
+        if(pos != -1){// if "<" is in local_command
           std_in(local_command, pos);
           return 0;
         }
@@ -236,7 +268,7 @@ int exec() {
 	}
       }
       j++;
-      printf("----------------------\n");
+      printf("\n----------------------\n");
     }
   }
   return 0;

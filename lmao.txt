@@ -1,7 +1,22 @@
-total 64
--rwxrwxr-x 1 riegbaumhauer riegbaumhauer 13832 Nov 30 22:06 a.out
--rw-rw-r-- 1 riegbaumhauer riegbaumhauer  1184 Nov 30 21:18 #exec.c#
--rw-rw-r-- 1 riegbaumhauer riegbaumhauer  1993 Nov 30 21:18 exec.c
+de_best_file
+#exec_new.c#
+exec_new.o
+executor.c
+executor.h
+executor.o
+holdme
+lmao.txt
+main.c
+main.o
+makefile
+no_touch
+shell
+stringext.c
+stringext.h
+stringext.o
+tester
+tester~
+baumhauer  1993 Nov 30 21:18 exec.c
 -rw-rw-r-- 1 riegbaumhauer riegbaumhauer  2331 Nov 30 22:02 exec_new.c
 -rw-rw-r-- 1 riegbaumhauer riegbaumhauer  4456 Nov 30 22:06 exec_new.o
 -rw-rw-r-- 1 riegbaumhauer riegbaumhauer    20 Nov 30 22:10 lmao.txt
